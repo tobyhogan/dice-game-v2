@@ -1,25 +1,40 @@
 from random import randint
+# random is used to generate random numbers for the rolling of dice for each player
 from tkinter import *
+# tkinter is used to create the GUI components
 from PIL import ImageTk, Image
-from time import sleep
+
+# PIl is used to modify images, and process them so they can be used in the GUI
 
 root = Tk()
 root.geometry("0x0")
 
+# creates the base window, where all other toplevel windows will be "placed" on
+
 global player_one_score
 global player_two_score
+
+# makes player one and player two's scores accessible from anywhere in the program
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
+# gets the width and height of the device the program is being run on
+
 window_width = 800
 window_height = 650
+
+# variables used to define the size of the actual game window
 
 x_origin = (screen_width / 2) - (window_width / 2)
 y_origin = (screen_height / 2) - (window_height / 2)
 
+# finds where to place the window, so it appears in the middle of the user's screen
+
 alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
             "V", "W", "X", "Y", "Z"]
+
+# creates a list of all the characters in the alphabet, this is used to randomly generate codes to save games
 
 menu_x = 85
 menu_y = 80
@@ -31,15 +46,21 @@ outcome_y = 100
 login_menu_x = 65
 login_menu_y = 140
 
+# assigns values to variables to define the padding that will be used in different pages
+
 player_one_score = 0
 player_two_score = 0
+
+# assigns values to variables used to store the current score of players one and two
 
 player_one_roll = 0
 player_two_roll = 0
 
-dice_pad = 6
+# variables store the roll of each player
 
 round = 1
+
+# stores the current round number
 
 dice_images = [ImageTk.PhotoImage(Image.open("/Users/tobyhogan/Downloads/dice1.jpg")),
                ImageTk.PhotoImage(Image.open("/Users/tobyhogan/Downloads/dice2.jpg")),
@@ -49,7 +70,12 @@ dice_images = [ImageTk.PhotoImage(Image.open("/Users/tobyhogan/Downloads/dice1.j
                ImageTk.PhotoImage(Image.open("/Users/tobyhogan/Downloads/dice6.jpg"))]
 
 
+# a list that stores each dice image needed to display numbers 1 to 6
+
+
 class a_game:
+    """A class that consolidates related information about a game that is currently being played"""
+
     def __init__(self, round, player_1, player_2, player_one_score, player_two_score, players_go):
         self.round = round
         self.players = players
@@ -61,6 +87,8 @@ class a_game:
 
 
 class player:
+    """A class that consolidates related information about a player that is logged in"""
+
     def __init__(self, number, username, password):
         self.password = password
         self.logged_in = False
@@ -72,15 +100,22 @@ class player:
 player_1 = player(1, "", "")
 player_2 = player(2, "", "")
 
+# creates instances of players, to be used as the 1st and 2nd players
+
 players = [player_1, player_2]
 
 
+# makes a list of the two players
+
 def high_scores_exit_procedure(player):
+    """A function that is executed when the highscores window is left, the function removes the window and
+    changes to the login options window"""
     high_scores_window.destroy()
     login_options_menu(player)
 
 
 def sort(arr):
+    """A function that sorts a list, using the bubble sort method"""
     for i in range(len(arr) - 1):
         for j in range(0, len(arr) - i - 1):
             if arr[j] < arr[j + 1]:
@@ -91,6 +126,8 @@ def sort(arr):
 
 
 def high_scores(player):
+    """A function that creates a window that shows the 10 highest scores achieved by players, the player
+    has an option to head back to the main menu after they have seen this"""
     global high_scores_window
 
     global names
@@ -135,11 +172,15 @@ def high_scores(player):
 
 
 def after_rules_close(player):
+    """A function that executes after the player has viewed the rules page, and wants to leave it, the
+    function removes teh window, and goes back to the main menu(login options menu)"""
     rules_window.destroy()
     login_options_menu(int(player))
 
 
 def rules(player):
+    """A function that creates the rules window, the rules window provides addtional infromation to players about
+    how the game works and how they can play it"""
     global rules_window
 
     options_window.destroy()
@@ -160,16 +201,20 @@ def rules(player):
 
 
 def after_bad_saved_input(player):
+    """A function that executes after the bad input window is displayed to the player, removing it and going
+    back to the main menu"""
     bad_input_window.destroy()
 
     login_options_menu(player)
 
 
 def bad_input_saved(player):
+    """A function that creates a window telling the player the input they have entered is not valid, becuase, for
+    instance, they have not entered a valid username"""
     global bad_input_window
 
     bad_input_window = Toplevel(root)
-    bad_input_window.title("INPUT NOT DETECTED")
+    bad_input_window.title("INVALID INPUT")
     bad_input_window.geometry('%dx%d+%d+%d' % (window_width, window_height, x_origin, y_origin))
 
     bad_input_message = Label(bad_input_window, text="Invalid input detected").pack()
@@ -178,6 +223,8 @@ def bad_input_saved(player):
 
 
 def check_players_save(player, gamesave_string, player_1_password, player_2_password):
+    """A function that loads saves if the information entered is correct, if it's not, then the bad
+    input window is made to appear"""
     start_game_window.destroy()
 
     file = open("logins.txt", "r+")
@@ -207,6 +254,8 @@ def check_players_save(player, gamesave_string, player_1_password, player_2_pass
 
 
 def check_save(player, code):
+    """A function that creates a window that asks for player's usernames and passwords if they have
+    entered correct information into the load save page"""
     f = open("gamesaves.txt", "r+")
 
     global start_game_window
@@ -267,6 +316,8 @@ def check_save(player, code):
 
 
 def load_save(player):
+    """A function that asks the players for information about a saved game, if the information they enter
+    is correct, then they can load a saved game and play it"""
     global save_window
 
     options_window.destroy()
@@ -289,6 +340,7 @@ def load_save(player):
 
 
 def player_1_or_2_create(player, username, password):
+    """A function allows player one or two to create a new account"""
     f = open("logins.txt", "a+")
 
     if validate(username, 15, 3) and validate(password, 15, 3):
@@ -323,6 +375,8 @@ def player_1_or_2_create(player, username, password):
 
 
 def create_account(player):
+    """A function that actually creates a new account, if the credentials entered on the "player_1_or_2
+    page were correct, once verified the information is added to the "logins.txt" file"""
     global create_account_window
 
     options_window.destroy()
@@ -347,11 +401,17 @@ def create_account(player):
 
 
 def after_save_game(player):
+    """A function that is executed after the player choses to close the save game window,
+    the function removes the window, and sends the player back the main menu by referencing its
+    function"""
     save_game_window.destroy()
     login_options_menu(1)
 
 
 def is_bad_code(code, other_codes):
+    """A function that compares a generated code to all the other codes that have already been generated
+    to ensure that it has not been used already, as this would not be a sustainable way to generate
+    codes"""
     bad = False
 
     for x in other_codes:
@@ -364,6 +424,9 @@ def is_bad_code(code, other_codes):
 
 
 def save_game():
+    """A function that creates the save game page, the save game page gives the player information
+    about their game after they save it, the save game also generates a unique code and gives
+    it to the player, so they can use it to continue playing the game"""
     global save_game_window
 
     game_window.destroy()
@@ -417,11 +480,16 @@ def save_game():
 
 
 def destroy_results_window_and_login():
+    """A function that executes after the user choses to close the results window and go back to the
+    main menu, the function removes the results window and reopens the login page"""
     results_window.destroy()
     login_options_menu(1)
 
 
 def result():
+    """A function that creates a result window that appears after a game has finished, the window displays
+    the players' scores adn gives the option to head back to the main menu
+    """
     global results_window
 
     results_window = Toplevel(root)
@@ -714,20 +782,3 @@ def login_options_menu(player):
 login_options_menu(1)
 
 mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
