@@ -507,6 +507,7 @@ def result():
 
 
 def winning(p1_score, p2_score):
+    """A function that determines which player is currently winning based of each player's scores"""
     if p1_score > p2_score:
         return "Player One"
     elif p2_score > p1_score:
@@ -516,6 +517,8 @@ def winning(p1_score, p2_score):
 
 
 def algorithm(number):
+    """A function that determines the operations that occur to a roll of dice in the game, depending on
+    whether each dice has the same number(a double) and whether the sum of the roll is odd or even"""
     if number % 2 == 0:
         return number + 10
     elif number % 2 != 0 and number - 5 >= 0:
@@ -525,6 +528,8 @@ def algorithm(number):
 
 
 def roll(player):
+    """A function that is called when a player attempts to roll their dice, the function determines which player
+    is rolling and changes their dice images according to what their roll was"""
     f = open("scores.txt", "a+")
 
     if int(game_1.round) <= 5 or game_1.player_one_score == game_1.player_two_score:
@@ -566,6 +571,8 @@ def roll(player):
 
 
 def game(round, player_1, player_2, player_one_score, player_two_score, players_go):
+    """A function that creates the main game page itself, on the page dice are shown for each player
+    and there are buttons that give each player the option to roll them"""
     global game_window
     global player_1_frame
     global player_2_frame
@@ -639,6 +646,9 @@ def game(round, player_1, player_2, player_one_score, player_two_score, players_
 
 
 def login_and_break(player, again):
+    """A function that is called when the player choses to leave the outcome window and go back
+    to the main menu, the function removes the outcomes window, and depending on which players are logged in
+    goes back to the main menu, as either player one or player two"""
     if again:
         outcome_window.destroy()
         login_options_menu(player)
@@ -652,6 +662,8 @@ def login_and_break(player, again):
 
 
 def outcome(status, player, again):
+    """A function that gives the outcome of a players attempt to login, if it was successful
+    it congratulates the player, if not, it tells the player the input they entered is invalid """
     global outcome_window
 
     outcome_window = Toplevel(root)
@@ -666,6 +678,8 @@ def outcome(status, player, again):
 
 
 def validate(string, max_len, min_len):
+    """A function that validates input against certain criteria that are specified by the parameters,
+    the function evaluates the inputs length"""
     if len(string) > max_len or len(string) < min_len:
 
         return False
@@ -674,6 +688,10 @@ def validate(string, max_len, min_len):
 
 
 def authorize(username, password, player):
+    """A function that is used to authorize users attempting to login, the functin will check the username
+    and password they've entered against the logins file(logins.txt) and see if they are present, if they
+    are the player will be allowed to move on to the main menu, if they aren't, then the player will be sent
+    back to the login page"""
     f = open("logins.txt", "r+")
     if player == 1:
         for x in f:
@@ -712,6 +730,8 @@ def authorize(username, password, player):
 
 
 def user_check(player):
+    """A function that serves as a medium for allowing users to enter their username and password, for them
+    to be checked, ensuring that users who play the game are authorized, as specified in the project brief"""
     global password_entry
     global username_entry
     global check_window
@@ -736,6 +756,8 @@ def user_check(player):
 
 
 def login_options_menu(player):
+    """A funciton that initially provides the with options they can take, users can login, create an account,
+    exit, look at the rules, or play the game by loading a save"""
     global options_window
 
     player_1.logged_in = False
@@ -780,5 +802,7 @@ def login_options_menu(player):
 
 
 login_options_menu(1)
+
+# the login options menu function is called to start the program
 
 mainloop()
